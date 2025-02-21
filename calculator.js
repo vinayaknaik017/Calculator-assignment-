@@ -16,26 +16,39 @@ function appendNumber(number) {
 }
 
 function appendOperator(op) {
-  if (operator !== "") {
+  if (firstOperand !== "" && operator !== "" && operator !== "=") {
     calculateResult();
   }
-  operator = op;
   firstOperand = displayValue;
+  operator = op;
   displayValue = "0";
   updateDisplay();
 }
 
 function calculateResult() {
+  if (firstOperand === "" || operator === "=") return;
+
+  let secondOperand = displayValue;
+  let result;
+
   if (operator === "+") {
-    displayValue = (parseFloat(firstOperand) + parseFloat(displayValue)).toString();
+    result = parseFloat(firstOperand) + parseFloat(secondOperand);
   } else if (operator === "-") {
-    displayValue = (parseFloat(firstOperand) - parseFloat(displayValue)).toString();
+    result = parseFloat(firstOperand) - parseFloat(secondOperand);
   } else if (operator === "*") {
-    displayValue = (parseFloat(firstOperand) * parseFloat(displayValue)).toString();
+    result = parseFloat(firstOperand) * parseFloat(secondOperand);
   } else if (operator === "/") {
-    displayValue = (parseFloat(firstOperand) / parseFloat(displayValue)).toString();
+    if (secondOperand === "0") {
+      displayValue = "Error";
+      updateDisplay();
+      return;
+    }
+    result = parseFloat(firstOperand) / parseFloat(secondOperand);
   }
+
+  displayValue = result.toString();
   operator = "=";
+  firstOperand = displayValue;
   updateDisplay();
 }
 
@@ -46,4 +59,4 @@ function clearDisplay() {
   updateDisplay();
 }
 
-updateDisplay()
+updateDisplay();
